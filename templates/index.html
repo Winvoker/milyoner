@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Milyoner Game Analytics Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Milyoner Competition Preparation Dashboard</h1>
+            <p>In-depth analysis for strategic preparation and performance optimization</p>
+        </header>
+
+        <!-- Overview Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📊</div>
+                <div class="stat-info">
+                    <h3 id="total-questions">-</h3>
+                    <p>Total Questions</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-info">
+                    <h3 id="total-contestants">-</h3>
+                    <p>Total Contestants</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎬</div>
+                <div class="stat-info">
+                    <h3 id="total-videos">-</h3>
+                    <p>Total Videos</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-info">
+                    <h3 id="overall-accuracy">-</h3>
+                    <p>Overall Accuracy</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">❌</div>
+                <div class="stat-info">
+                    <h3 id="total-eliminated">-</h3>
+                    <p>Total Eliminated</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">📈</div>
+                <div class="stat-info">
+                    <h3 id="average-level">-</h3>
+                    <p>Average Level</p>
+                </div>
+            </div>
+        </div> <!-- Charts Section -->
+        <div class="charts-section">
+            <div class="chart-container">
+                <h2>� Topic Distribution & Difficulty Analysis</h2>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>⚡ Elimination Risk by Level</h2>
+                <canvas id="levelChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>🅰️ Answer Choice Bias Analysis</h2>
+                <canvas id="answerChoiceChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>🃏 Joker Usage Effectiveness</h2>
+                <canvas id="jokerChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>� Preparation Priority Guide</h2>
+                <canvas id="preparationChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2>⚠️ Critical Elimination Points</h2>
+                <canvas id="eliminationChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Analysis Tables Section -->
+        <div class="analysis-section">
+            <div class="table-section">
+                <h2>📋 Category-Level Distribution Analysis</h2>
+                <div class="table-container">
+                    <table id="categoryLevelTable">
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Total Questions</th>
+                                <th>Before Level 7</th>
+                                <th>Level 7+</th>
+                                <th>Early Accuracy</th>
+                                <th>Late Accuracy</th>
+                                <th>Recommendation</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryLevelTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="table-section">
+                <h2>🎯 Answer Choice Statistics</h2>
+                <div class="analysis-grid">
+                    <div class="analysis-card">
+                        <h3>Most Selected</h3>
+                        <div class="big-stat" id="most-selected">-</div>
+                    </div>
+                    <div class="analysis-card">
+                        <h3>Most Correct</h3>
+                        <div class="big-stat" id="most-correct">-</div>
+                    </div>
+                    <div class="analysis-card">
+                        <h3>Best Strategy</h3>
+                        <div class="big-stat" id="best-strategy">-</div>
+                    </div>
+                    <div class="analysis-card">
+                        <h3>Avoid Bias</h3>
+                        <div class="big-stat" id="avoid-bias">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Answer Analysis Section -->
+            <div class="table-section">
+                <h2>🔍 Detailed Şık Analysis</h2>
+
+                <!-- Before/After Level 7 Bias -->
+                <div class="bias-comparison">
+                    <h3>Before vs After Level 7 Bias</h3>
+                    <div class="comparison-container">
+                        <div class="comparison-side">
+                            <h4>Before Level 7</h4>
+                            <div class="bias-stats" id="before-level-7-bias"></div>
+                        </div>
+                        <div class="comparison-side">
+                            <h4>Level 7 and After</h4>
+                            <div class="bias-stats" id="after-level-7-bias"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level-by-Level Bias Analysis -->
+                <div class="level-bias-section">
+                    <h3>Level-by-Level Şık Bias</h3>
+                    <div class="bias-table" id="level-bias-table"></div>
+                </div>
+
+                <!-- Category Bias Analysis -->
+                <div class="category-bias-section">
+                    <h3>Category Şık Bias</h3>
+                    <div class="bias-table" id="category-bias-table"></div>
+                </div>
+
+                <!-- Strategic Insights -->
+                <div class="insights-section">
+                    <h3>Strategic Insights</h3>
+                    <div class="insights-grid" id="strategic-insights"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pattern Analysis Section -->
+        <div class="analysis-section">
+            <div class="chart-container">
+                <h2>🧠 Advanced Pattern Analysis</h2>
+                <div id="patternAnalysisControls">
+                    <button id="loadPatternAnalysis" class="btn">Load Pattern Analysis</button>
+                    <div id="patternAnalysisStatus" class="status-message"></div>
+                </div>
+
+                <div id="patternAnalysisResults" class="pattern-results">
+                    <div class="pattern-section">
+                        <h3>🔗 Choice Transition Matrix</h3>
+                        <div id="transitionMatrix" class="matrix-container"></div>
+                    </div>
+
+                    <div class="pattern-section">
+                        <h3>🎯 Sequential Success Patterns</h3>
+                        <div id="sequentialPatterns" class="pattern-list"></div>
+                    </div>
+
+                    <div class="pattern-section">
+                        <h3>🎲 First Choice Impact</h3>
+                        <div id="firstChoiceImpact" class="impact-analysis"></div>
+                    </div>
+
+                    <div class="pattern-section">
+                        <h3>🏆 Performance Clusters</h3>
+                        <div id="performanceClusters" class="cluster-analysis"></div>
+                    </div>
+
+                    <div class="pattern-section">
+                        <h3>💡 Strategic Insights</h3>
+                        <div id="strategicInsights" class="insights-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Details Modal -->
+        <div id="questionModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Question Details</h2>
+                <div id="questionDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
